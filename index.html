@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Noise-Experimentation</title>
+	<script src="js/lib/noise.js"></script>
+	<script src="js/core/canvas_stuff.js"></script>
+</head>
+<body onload="Canvas.load();">
+	<button onclick="Canvas.drawLight();">Luminosity</button>
+	<button onclick="Canvas.drawLines();">Lines</button>
+	<button onclick="Canvas.drawRGB();">Colour (RGB)</button>
+	<button onclick="Canvas.drawMountain();">Mountains</button>
+	<button onclick="Canvas.drawField();">Field</button>
+	<button onclick="Canvas.fieldAnim.draw();">Field Animated</button>
+	<!--button onclick="Canvas.drawDS1D();">Diamond-Square 1d</button-->
+	<br>
+	<canvas id="c" height="500" width="1000"></canvas>
+</body>
+</html>
