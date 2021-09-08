@@ -78,11 +78,29 @@ const Canvas = {
 		let noise3 = Lerp(Noise(41, 41, 0.2), 25);
 		let noise4 = Lerp(Noise(101, 101, 0.1), 10);
 		for (let i = 0; i < 1000; i++) {
+			ctx.fillStyle = `rgba(${255 - i/4}, ${255 - i/4}, ${(255 - i/4)*1.2 + 10})`
 			for (let j = 0; j < 1000; j++) {
 				let v = (noise1[i][j] + noise2[i][j] + noise3[i][j] + noise4[i][j])*(200) + 300 - i/4;
-				ctx.fillStyle = `rgba(${255 - i/4}, ${255 - i/4}, ${(255 - i/4)*1.2 + 10})`
 				ctx.fillRect(j, 500 - v, 1, v);
 			}
+		}
+	},
+	drawArchipegalo(waterheight) {
+		Canvas.new();
+		ctx.fillStyle = "#fff"
+		ctx.fillRect(0, 0, 1000, 1000);
+		let noise1 = Lerp(Noise(6, 6, 0.4), 200);
+		let noise2 = Lerp(Noise(11, 11, 0.3), 100);
+		let noise3 = Lerp(Noise(41, 41, 0.2), 25);
+		let noise4 = Lerp(Noise(70, 70, 0.1), 15);
+		for (let i = 0; i < 1000; i++) {
+			ctx.fillStyle = `rgba(${255 - i/4}, ${255 - i/4}, ${(255 - i/4)*1.2 + 10})`
+			for (let j = 0; j < 1000; j++) {
+				let v = (noise1[i][j] + noise2[i][j] + noise3[i][j] + noise4[i][j])*(200) + 220 - i/3;
+				ctx.fillRect(j, 500 - v, 1, v);
+			}
+			ctx.fillStyle = `rgba(${255 - i/4}, ${Math.min(330 - i/4, 255)}, ${(400 - i/4)*1.2 + 10})`
+			ctx.fillRect(0, waterheight + i/3, 1000, 500);
 		}
 	},
 	drawField() {
