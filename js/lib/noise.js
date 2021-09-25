@@ -19,76 +19,29 @@ function Noise(x, y, scalar=1) {
 }
 
 function Lerp1d(px, py, pp) {
+	if (pp == 0) return px;
+	if (pp == 1) return py;
 	let f = 0.5 - Math.cos(pp*Math.PI)*0.5;
 	return px*(1 - f) + py*f;
 }
 function Lerp(noise, interval) {
-	let lerpX = [], lerpXPrim = [];
+	let map = [];
 	let w = noise.length*interval - interval;
-	let lerpY = [], lerpYPrim = [];
 	let h = noise[0].length*interval - interval;
 
 	let c = 1/interval;
-
-	for (let i = 0; i < noise.length; i++) {
-		lerpXPrim.push([]);
-		for (let j = 0; j <= w; j++) {
-			let lerpPos = j%interval;
-			if (lerpPos == 0) lerpXPrim[i][j] = noise[i][j*c];
-			else {
-				let p = Math.floor(j*c);
-				lerpXPrim[i][j] = Lerp1d(noise[i][p], noise[i][p + 1], lerpPos*c);
-			}
-		}
-	}
-	for (let i = 0; i < noise[0].length; i++) {
-		lerpYPrim.push([]);
-		for (let j = 0; j <= h; j++) {
-			let lerpPos = j%interval;
-			if (lerpPos == 0) lerpYPrim[i][j] = noise[j*c][i];
-			else {
-				let p = Math.floor(j*c);
-				lerpYPrim[i][j] = Lerp1d(noise[p][i], noise[p + 1][i], lerpPos*c);
-			}
+	for (let i = 0; i < w; i++) {
+		map.push([]);
+		let lerpPosX = i%interval, tilePosX = (i - lerpPosX)/interval;
+		for (let j = 0; j < h; j++) {
+			let lerpPosY = j%interval, tilePosY = (j - lerpPosY)/interval;
+			let leftValue = Lerp1d(noise[tilePosX][tilePosY], noise[tilePosX][tilePosY + 1], lerpPosY*c);
+			let rightValue = Lerp1d(noise[tilePosX + 1][tilePosY], noise[tilePosX + 1][tilePosY + 1], lerpPosY*c);
+			map[i][j] = Lerp1d(leftValue, rightValue, lerpPosX*c)
 		}
 	}
 
-	for (let i = 0; i <= h; i++) {
-		lerpX.push([]);
-		for (let j = 0; j <= w; j++) {
-			if (i%interval == 0) lerpX[i][j] = lerpXPrim[i*c][j];
-			else {
-				let lerpPos = j%interval;
-				if (lerpPos == 0) {
-					lerpX[i][j] = lerpYPrim[j*c][i];
-				}
-				else {
-					let p = Math.floor(j*c)
-					lerpX[i][j] = Lerp1d(lerpYPrim[p][i], lerpYPrim[p + 1][i], lerpPos*c);
-				}
-			}
-		}
-	}
-	for (let i = 0; i <= h; i++) {
-		lerpY.push([]);
-		let lerpPos = i%interval;
-		for (let j = 0; j <= w; j++) {
-			if (j%interval == 0) lerpY[i][j] = lerpYPrim[j*c][i];
-			else {
-				if (lerpPos == 0) lerpY[i][j] = lerpXPrim[i*c][j];
-				else {
-					let p = Math.floor(j*c);
-					lerpY[i][j] = Lerp1d(lerpYPrim[p][i], lerpYPrim[p + 1][i], (j%interval)*c);
-				}
-			}
-		}
-	}
-
-	return lerpX.map((arr, x) => {
-		return arr.map((val, y) => {
-			return (val + lerpY[x][y])/2;
-		})
-	})
+	return map;
 }
 
 function ds1D(n, s=randomNoiseBit(), e=randomNoiseBit()) {
@@ -99,15 +52,8 @@ function ds1D(n, s=randomNoiseBit(), e=randomNoiseBit()) {
 
 	for (let j = 0; j < n; j++) {
 		for (let k = 0; k < 2**j; k++) {
-			let randomVal = Math.round(randomNoiseBit()*(k*2**(n - j))) + k*2**(n - j);
-			let hasRandInt = false, randInt = 0;
-			if (arr[randomVal] != undefined) {
-				randInt = arr[randomVal];
-				hasRandInt = true;
-			}
-
-			let valN = (arr[k*2**(n - j)] + arr[(k + 1)*2**(n - j)]);
-			arr[2**(n - j - 1) + k*2**(n - j)] = (valN + (hasRandInt ? randInt : 0))/(hasRandInt ? 3 : 2);
+			let valN = (arr[k*2**(n - j)]*2 + arr[(k + 1)*2**(n - j)]);
+			arr[2**(n - j - 1) + k*2**(n - j)] = valN/3;
 		}
 	}
 

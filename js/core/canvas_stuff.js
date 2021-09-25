@@ -40,13 +40,13 @@ const Canvas = {
 	drawLight() {
 		Canvas.new();
 		ctx.clearRect(0, 0, 1000, 1000);
-		let noise1 = Lerp(Noise(11, 11, 0.4), 100);
-		let noise2 = Lerp(Noise(31, 31, 0.3), 34);
-		let noise3 = Lerp(Noise(51, 51, 0.2), 20);
-		let noise4 = Lerp(Noise(101, 101, 0.1), 10);
-		let noise5 = Lerp(Noise(251, 251, 0.05), 4);
+		let noise1 = Lerp(Noise(11, 6, 0.4), 100);
+		let noise2 = Lerp(Noise(31, 16, 0.3), 34);
+		let noise3 = Lerp(Noise(51, 26, 0.2), 20);
+		let noise4 = Lerp(Noise(101, 51, 0.1), 10);
+		let noise5 = Lerp(Noise(251, 126, 0.05), 4);
 		for (let i = 0; i < 1000; i++) {
-			for (let j = 0; j < 1000; j++) {
+			for (let j = 0; j < 500; j++) {
 				let v = (noise1[i][j] + noise2[i][j] + noise3[i][j] + noise4[i][j] + noise5[i][j])*255;
 				ctx.fillStyle = `rgb(${v}, ${v}, ${v})`
 				ctx.fillRect(i, j, 1, 1);
