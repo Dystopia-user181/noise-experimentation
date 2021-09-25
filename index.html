@@ -6,6 +6,8 @@
 	<script src="js/core/canvas_stuff.js"></script>
 </head>
 <body onload="Canvas.load();">
+	<button onclick="Canvas.drawNoise();">Unprocessed Noise</button>
+	<button onclick="Canvas.drawNoise1D();">Unprocessed 1D Noise</button>
 	<button onclick="Canvas.drawLight();">Luminosity</button>
 	<button onclick="Canvas.drawLines();">Lines</button>
 	<button onclick="Canvas.drawRGB();">Colour (RGB)</button>
@@ -16,6 +18,8 @@
 	<button onclick="Canvas.fieldAnim.draw();">Field Animated</button>
 	<!--button onclick="Canvas.drawDS1D();">Diamond-Square 1d</button-->
 	<br>
-	<canvas id="c" height="500" width="1000"></canvas>
+	<canvas id="c" height="500" width="1000"></canvas><br>
+	CONFIG<br>
+	<button onclick="flat1D = !flat1D; this.innerText = 'Draw heightmap of 1D noise: ' + (flat1D ? 'Off' : 'On')">Draw heightmap of 1D noise: Off</button>
 </body>
 </html>

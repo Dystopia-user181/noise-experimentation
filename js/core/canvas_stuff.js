@@ -1,4 +1,4 @@
-let c, ctx;
+let c, ctx, flat1D = true;
 
 const Canvas = {
 	load() {
@@ -8,6 +8,34 @@ const Canvas = {
 	new() {
 		clearInterval(Canvas.fieldAnim.intervalId);
 		Canvas.fieldAnim.time = 0;
+	},
+	drawNoise() {
+		Canvas.new();
+		ctx.clearRect(0, 0, 1000, 1000);
+		let noise1 = Noise(40, 20);
+		for (let i = 0; i < 40; i++) {
+			for (let j = 0; j < 20; j++) {
+				let v = noise1[i][j]*255;
+				ctx.fillStyle = `rgb(${v}, ${v}, ${v})`
+				ctx.fillRect(i*25, j*25, 25, 25);
+			}
+		}
+	},
+	drawNoise1D() {
+		Canvas.new();
+		ctx.clearRect(0, 0, 1000, 1000);
+		let noise1 = Noise(41, 1);
+		for (let i = 0; i < 40; i++) {
+			let v = noise1[i][0]*255;
+			if (flat1D) {
+				ctx.fillStyle = `rgb(${v}, ${v}, ${v})`;
+				ctx.fillRect(i*25, 0, 25, 1000);
+			} else {
+				v *= 500/255;
+				ctx.fillStyle = "#000";
+				ctx.fillRect(i*25, v, 25, 500);
+			}
+		}
 	},
 	drawLight() {
 		Canvas.new();
