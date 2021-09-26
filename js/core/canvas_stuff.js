@@ -155,10 +155,7 @@ const Canvas = {
 		}
 	},
 	fieldAnim: {
-		set1: [],
-		set2: [],
-		set3: [],
-		set4: [],
+		lattice: [],
 		time: 0,
 		intervalId: 0,
 		draw() {
@@ -168,27 +165,24 @@ const Canvas = {
 
 			ctx.lineWidth = 3;
 			ctx.lineCap = "round";
-			for (let i = 1; i < 5; i++) {
-				let noise1 = Lerp(Noise(3, 3, 0.8), 25);
-				let noise2 = Lerp(Noise(5, 5, 0.5), 13);
-				let noise3 = Lerp(Noise(11, 11, 0.3), 5);
-				Canvas.fieldAnim["set" + i] = noise1.map((i, x) => i.map((j, y) => j + noise2[x][y] + noise3[x][y]))
-			}
-			this.intervalId = setInterval(this.drawFrame, 16)
+			let noise1 = Lerp3D(Noise3D(3, 3, 6, 0.8), 25, 160);
+			let noise2 = Lerp3D(Noise3D(5, 5, 17, 0.3), 13, 50);
+			let noise3 = Lerp3D(Noise3D(11, 11, 26, 0.1), 5, 32);
+			this.lattice = noise1.map((i, x) => i.map((j, y) => j.map((k, z) => k + noise2[x][y][z] + noise3[x][y][z])));
+			this.intervalId = setInterval(this.drawFrame, 20);
 		},
 		drawFrame() {
 			ctx.fillStyle = "#000"
 			ctx.fillRect(0, 0, 1000, 1000);
-			let lerpPos = Math.floor(Canvas.fieldAnim.time/200) + 1,
-				lerpPos2 = (lerpPos%4) + 1;
 
 			for (let i = 0; i < 50; i++) {
 				for (let j = 0; j < 50; j++) {
-					let n = Lerp1d(Canvas.fieldAnim["set" + lerpPos][i][j], Canvas.fieldAnim["set" + lerpPos2][i][j],
-						Canvas.fieldAnim.time%200/200, true),
+					let n = Canvas.fieldAnim.lattice[i][j][Canvas.fieldAnim.time],
 						v = n*Math.PI*2;
 
 					ctx.strokeStyle = `hsl(${n*120 + 60}, ${Math.cos(v*4)*30 + 70}%, ${Math.cos(v*4)*20 + 50}%)`;
+					if (time < 50) ctx.strokeStyle += ('0' + Lerp1d(0, 255, time/50).toString(16)).slice(-2);
+					else if (time > 750) ctx.strokeStyle += ('0' + Lerp1d(255, 0, (time - 750)/50).toString(16)).slice(-2);
 
 					ctx.beginPath();
 					ctx.moveTo(i*20 - Math.cos(v)*10 + 10, j*20 - Math.sin(v)*10 + 10);
