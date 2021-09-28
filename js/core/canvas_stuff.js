@@ -145,7 +145,7 @@ const Canvas = {
 		for (let i = 0; i < 50; i++) {
 			for (let j = 0; j < 50; j++) {
 				let n = noise1[i][j] + noise2[i][j] + noise3[i][j], v = n*Math.PI*2;
-				ctx.strokeStyle = `hsl(${n*120 + 60}, ${Math.cos(v*4)*30 + 70}%, ${Math.cos(v*4)*20 + 50}%)`;
+				ctx.strokeStyle = `hsl(${n*360}, ${Math.cos(v*4)*30 + 70}%, ${Math.cos(v*4)*20 + 50}%)`;
 
 				ctx.beginPath();
 				ctx.moveTo(i*20 - Math.cos(v)*10 + 10, j*20 - Math.sin(v)*10 + 10);
@@ -181,7 +181,7 @@ const Canvas = {
 					let n = Canvas.fieldAnim.lattice[i][j][time],
 						v = n*Math.PI*2;
 
-					ctx.strokeStyle = `hsl(${n*120 + 60}, ${Math.cos(v*4)*30 + 70}%, ${Math.cos(v*4)*20 + 50}%)`;
+					ctx.strokeStyle = `hsl(${n*360}, ${Math.cos(v*4)*30 + 70}%, ${Math.cos(v*4)*20 + 50}%)`;
 					if (time < 50) ctx.strokeStyle += ('0' + Math.floor(Lerp1d(0, 255, time/50)).toString(16)).slice(-2);
 					else if (time > 750) ctx.strokeStyle += ('0' + Math.floor(Lerp1d(255, 0, (time - 750)/50)).toString(16)).slice(-2);
 
